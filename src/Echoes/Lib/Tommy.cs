@@ -80,7 +80,7 @@ namespace Tommy
             set { }
         }
 
-        public virtual IEnumerable<TomlNode?>? Children
+        public virtual IEnumerable<TomlNode?> Children
         {
             get { yield break; }
         }
@@ -90,7 +90,7 @@ namespace Tommy
             get { yield break; }
         }
 
-        public IEnumerator? GetEnumerator() => Children?.GetEnumerator();
+        public IEnumerator GetEnumerator() => Children!.GetEnumerator();
 
         public virtual bool TryGetNode(string key, out TomlNode? node)
         {
@@ -119,7 +119,7 @@ namespace Tommy
 
         public virtual void WriteTo(TextWriter tw, string? name = null) => tw.WriteLine(ToInlineToml());
 
-        public virtual string ToInlineToml() => ToString();
+        public virtual string ToInlineToml() => ToString() ?? string.Empty;
 
         #region Native type to TOML cast
 
@@ -148,7 +148,7 @@ namespace Tommy
 
         #region TOML to native type cast
 
-        public static implicit operator string(TomlNode value) => value.ToString();
+        public static implicit operator string(TomlNode value) => value.ToString() ?? string.Empty;
 
         public static implicit operator int(TomlNode value) => (int) (value.AsInteger?.Value ?? 0);
 
@@ -229,7 +229,7 @@ namespace Tommy
 
         public override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
 
-        public string ToString(string format, IFormatProvider formatProvider) => Value.ToString(format, formatProvider);
+        public string ToString(string? format, IFormatProvider? formatProvider) => Value.ToString(format, formatProvider);
 
         public string ToString(IFormatProvider formatProvider) => Value.ToString(formatProvider);
 
@@ -259,7 +259,7 @@ namespace Tommy
     {
         public int SecondsPrecision { get; set; }
         public override bool HasValue { get; } = true;
-        public virtual string ToString(string format, IFormatProvider formatProvider) => string.Empty;
+        public virtual string ToString(string? format, IFormatProvider? formatProvider) => string.Empty;
         public virtual string ToString(IFormatProvider formatProvider) => string.Empty;
         protected virtual string ToInlineTomlInternal() => string.Empty;
 
@@ -276,7 +276,7 @@ namespace Tommy
         public override string ToString() => Value.ToString(CultureInfo.InvariantCulture);
         public override string ToString(IFormatProvider formatProvider) => Value.ToString(formatProvider);
 
-        public override string ToString(string format, IFormatProvider formatProvider) =>
+        public override string ToString(string? format, IFormatProvider? formatProvider) =>
             Value.ToString(format, formatProvider);
 
         protected override string ToInlineTomlInternal() => Value.ToString(TomlSyntax.RFC3339Formats[SecondsPrecision]);
@@ -299,7 +299,7 @@ namespace Tommy
 
         public override string ToString(IFormatProvider formatProvider) => Value.ToString(formatProvider);
 
-        public override string ToString(string format, IFormatProvider formatProvider) =>
+        public override string ToString(string? format, IFormatProvider? formatProvider) =>
             Value.ToString(format, formatProvider);
 
         public override string ToInlineToml() =>
@@ -345,7 +345,7 @@ namespace Tommy
 
         public override int ChildrenCount => RawArray.Count;
 
-        public override IEnumerable<TomlNode> Children => RawArray.AsEnumerable();
+        public override IEnumerable<TomlNode?> Children => RawArray.AsEnumerable();
 
         public override void Add(TomlNode node) => RawArray.Add(node);
 
@@ -452,7 +452,7 @@ namespace Tommy
         }
 
         public override int ChildrenCount => RawTable.Count;
-        public override IEnumerable<TomlNode?>? Children => RawTable.Select(kv => kv.Value);
+        public override IEnumerable<TomlNode?> Children => RawTable.Select(kv => kv.Value);
         public override IEnumerable<string> Keys => RawTable.Select(kv => kv.Key);
         public override bool HasKey(string key) => RawTable.ContainsKey(key);
         public override void Add(string key, TomlNode node) => RawTable.Add(key, node);
