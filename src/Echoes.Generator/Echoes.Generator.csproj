@@ -28,6 +28,10 @@
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <IncludeBuildOutput>false</IncludeBuildOutput> <!-- Do not include the generator as a lib dependency -->
     </PropertyGroup>
+
+    <ItemGroup>
+      <Compile Include="..\Shared\Tommy.cs" Link="Tommy.cs" />
+    </ItemGroup>
     <ItemGroup>
         <!-- Package the generator in the analyzer directory of the nuget package -->
         <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
